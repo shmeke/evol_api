@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\chatmessagelog;
+use App\Models\ChatMessage;
 use Illuminate\Http\Request;
 
 class ChatMessageController extends Controller
@@ -15,7 +15,14 @@ class ChatMessageController extends Controller
 
     public function store(Request $request)
     {
-        $message = ChatMessage::create($request);
+        $validateddata = $request->validate([
+            'message' => 'required|string',
+            'chat_id' => 'required|integer',
+            'from_user_id' => 'required|integer',
+            'to_user_id' => 'required|integer'
+        ]);
+
+        $message = ChatMessage::create($validateddata);
         return response()->json($message, 201);
     }
 
